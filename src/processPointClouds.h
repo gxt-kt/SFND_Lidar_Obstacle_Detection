@@ -18,6 +18,7 @@
 #include <vector>
 #include <ctime>
 #include <chrono>
+#include <filesystem>
 #include "render/box.h"
 
 #include "ransac3d.cpp"
