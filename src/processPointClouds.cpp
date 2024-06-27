@@ -60,12 +60,14 @@ PtCdtr<PointT> ProcessPointClouds<PointT>::FilterCloud(PtCdtr<PointT> cloud, flo
 
     // TODO:: Fill in the function to do voxel grid point reduction and region based filtering
     // Create the filtering object: downsample the dataset using a leaf size of .2m
+    // 体素降采样
     pcl::VoxelGrid<PointT> vg;
     PtCdtr<PointT> cloudFiltered(new pcl::PointCloud<PointT>);
     vg.setInputCloud(cloud);
     vg.setLeafSize(filterRes, filterRes, filterRes);
     vg.filter(*cloudFiltered);
 
+    // 设置roi区域
     PtCdtr<PointT> cloudRegion(new pcl::PointCloud<PointT>);
     pcl::CropBox<PointT> region(true);
     region.setMin(minPoint);
@@ -73,6 +75,7 @@ PtCdtr<PointT> ProcessPointClouds<PointT>::FilterCloud(PtCdtr<PointT> cloud, flo
     region.setInputCloud(cloudFiltered);
     region.filter(*cloudRegion);
 
+    // 去除屋顶点云
     std::vector<int> indices;
     pcl::CropBox<PointT> roof(true);
     roof.setMin(Eigen::Vector4f(-1.5, -1.7, -1, 1));

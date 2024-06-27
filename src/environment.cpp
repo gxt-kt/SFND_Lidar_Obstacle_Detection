@@ -9,6 +9,8 @@
 #include "processPointClouds.h"
 // using templates for processPointClouds so also include .cpp to help linker
 #include "processPointClouds.cpp"
+
+#include "yaml_config.h"
 using namespace lidar_obstacle_detection;
 
 std::vector<Car> initHighway(bool renderScene, pcl::visualization::PCLVisualizer::Ptr &viewer) {
@@ -54,9 +56,18 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr &viewer, ProcessPointCloud
     // Setting hyper parameters
 
     // FilterCloud
-    float filterRes = 0.4;
-    Eigen::Vector4f minpoint(-10, -6.5, -2, 1);
-    Eigen::Vector4f maxpoint(30, 6.5, 1, 1);
+    // float filterRes = 0.4;
+    float filterRes=yaml_config["filterRes"].as<float>();
+    // Eigen::Vector4f minpoint(-10, -6.5, -2, 1);
+    // Eigen::Vector4f maxpoint(30, 6.5, 1, 1);
+    double max_x=yaml_config["roi"]["max_x"].as<double>();
+    double max_y=yaml_config["roi"]["max_y"].as<double>();
+    double max_z=yaml_config["roi"]["max_z"].as<double>();
+    double min_x=yaml_config["roi"]["min_x"].as<double>();
+    double min_y=yaml_config["roi"]["min_y"].as<double>();
+    double min_z=yaml_config["roi"]["min_z"].as<double>();
+    Eigen::Vector4f maxpoint(max_x,max_y,max_z,1);
+    Eigen::Vector4f minpoint(min_x,min_y,min_z,1);
     // SegmentPlane
     int maxIterations = 40;
     float distanceThreshold = 0.3;
@@ -197,10 +208,15 @@ int main(int argc, char **argv) {
 //     viewer->spinOnce ();
 //    }
 //
+    std::string pcd_files_path = "src/sensors/data/pcd/data_1";
+    if (argc >= 2) {
+      pcd_files_path = argv[1];
+    }
+    std::cout << "Read pcd file path: " << pcd_files_path << std::endl;
 
 //  Stream cityBlock function
     ProcessPointClouds<pcl::PointXYZI> *pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
-    std::vector<std::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_1");
+    std::vector<std::filesystem::path> stream = pointProcessorI->streamPcd(pcd_files_path);
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI;
 
