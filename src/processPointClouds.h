@@ -60,7 +60,7 @@ namespace lidar_obstacle_detection {
 
         PtCdtr<PointT> loadPcd(std::string file);
 
-        std::vector<boost::filesystem::path> streamPcd(std::string dataPath);
+        std::vector<std::filesystem::path> streamPcd(std::string dataPath);
 
     };
 }
