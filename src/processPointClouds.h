@@ -52,6 +52,7 @@ namespace lidar_obstacle_detection {
         std::pair<PtCdtr<PointT>, PtCdtr<PointT>>SegmentPlane(PtCdtr<PointT> cloud, int maxIterations, float distanceTol);
 
         std::vector<PtCdtr<PointT>>EuclideanClustering(PtCdtr<PointT> cloud, float clusterTolerance, int minSize,int maxSize);
+        std::vector<PtCdtr<PointT>> GxtEuclideanClustering( PtCdtr<PointT> input_cloud, float cluster_tolerance, int min_cluster_size, int max_cluster_size);
 
         std::vector<PtCdtr<PointT>>Clustering(PtCdtr<PointT> cloud, float clusterTolerance, int minSize, int maxSize);
 
